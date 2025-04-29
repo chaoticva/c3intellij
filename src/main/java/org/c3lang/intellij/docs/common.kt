@@ -35,6 +35,28 @@ internal fun findDocumentationComment(element: PsiElement): String
     return builder.toString().replace("<*", "").replace("*>", "")
 }
 
+internal fun findDocumentationCommentByDeclaration(element: PsiElement): String
+{
+    // check if parent is default module or not
+    var prev = if (element.parent.parent is C3DefaultModuleSection) element.parent.parent.prevSibling else element.parent.prevSibling
+
+    while (prev is PsiWhiteSpace)
+    {
+        prev = prev.prevSibling
+    }
+
+    if (prev == null) return ""
+
+    val builder = StringBuilder()
+    while (prev.elementType == C3ParserDefinition.DOC_COMMENT)
+    {
+        builder.appendLine(prev.text)
+        prev = prev.prevSibling
+    }
+
+    return builder.toString().replace("<*", "").replace("*>", "")
+}
+
 internal fun applyHtmlStyles(text: String, attributes: TextAttributes?): String
 {
     if (attributes == null) return HtmlChunk.text(text).toString()

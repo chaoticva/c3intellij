@@ -2,6 +2,7 @@ package org.c3lang.intellij.docs
 
 import com.intellij.lang.documentation.AbstractDocumentationProvider
 import com.intellij.psi.PsiElement
+import org.c3lang.intellij.psi.C3CallExpr
 import org.c3lang.intellij.psi.C3ConstDeclarationStmt
 import org.c3lang.intellij.psi.C3FuncDef
 import org.c3lang.intellij.psi.C3LocalDeclAfterType
@@ -11,6 +12,11 @@ class C3DocumentationProvider : AbstractDocumentationProvider()
 {
     override fun generateDoc(element: PsiElement?, originalElement: PsiElement?): String?
     {
+        if (originalElement?.parent?.parent?.parent is C3CallExpr)
+        {
+            return generateCallExprDoc(originalElement.parent.parent.parent as C3CallExpr)
+        }
+
         return when (element)
         {
             is C3FuncDef              -> generateFuncDefDoc(element)
