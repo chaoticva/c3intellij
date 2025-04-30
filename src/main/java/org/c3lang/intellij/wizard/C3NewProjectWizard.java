@@ -120,10 +120,15 @@ public class C3NewProjectWizard implements LanguageGeneratorNewProjectWizard
 
             try
             {
+                String name = project.getName()
+                        .replaceAll("-", "_")
+                        .replaceAll(" ", "_")
+                        .toLowerCase();
+
                 FileUtil.writeToFile(licenseFilePath, "");
                 FileUtil.writeToFile(readmeFilePath, "");
-                C3Util.INSTANCE.writeToFile(project.getName(), "templates/project.json", projectJsonFilePath);
-                C3Util.INSTANCE.writeToFile(project.getName(), "templates/main", mainFilePath);
+                C3Util.INSTANCE.writeToFile(name, "templates/project.json", projectJsonFilePath);
+                C3Util.INSTANCE.writeToFile(name, "templates/main", mainFilePath);
             } catch (IOException e)
             {
                 log.error(e.getMessage(), e);

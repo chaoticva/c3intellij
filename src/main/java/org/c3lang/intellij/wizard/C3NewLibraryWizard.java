@@ -110,11 +110,15 @@ public class C3NewLibraryWizard implements LanguageGeneratorNewProjectWizard
                     "scripts"
             };
 
-            String moduleName = project.getName().replaceAll(" ", "_").toLowerCase();
+            String name = project.getName()
+                    .replaceAll("-", "_")
+                    .replaceAll(" ", "_")
+                    .toLowerCase();
+
             File licenseFilePath = Path.of(project.getBasePath(), "LICENSE").toFile();
             File readmeFilePath = Path.of(project.getBasePath(), "README.md").toFile();
             File manifestJsonFilePath = Path.of(project.getBasePath(), "manifest.json").toFile();
-            File moduleFilePath = Path.of(project.getBasePath(), moduleName + ".c3i").toFile();
+            File moduleFilePath = Path.of(project.getBasePath(), name + ".c3i").toFile();
 
             WebModuleBuilder<?> builder = new WebModuleBuilder<>();
             builder.setName(parent.getContext().getProjectName());
@@ -130,8 +134,8 @@ public class C3NewLibraryWizard implements LanguageGeneratorNewProjectWizard
             {
                 FileUtil.writeToFile(licenseFilePath, "");
                 FileUtil.writeToFile(readmeFilePath, "");
-                C3Util.INSTANCE.writeToFile(moduleName, "templates/library", moduleFilePath);
-                C3Util.INSTANCE.writeToFile(moduleName, "templates/manifest.json", manifestJsonFilePath);
+                C3Util.INSTANCE.writeToFile(name, "templates/library", moduleFilePath);
+                C3Util.INSTANCE.writeToFile(name, "templates/manifest.json", manifestJsonFilePath);
             } catch (IOException e)
             {
                 log.error(e.getMessage(), e);
