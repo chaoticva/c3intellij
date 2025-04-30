@@ -8,6 +8,7 @@ import com.intellij.ide.fileTemplates.FileTemplateUtil
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.util.NlsContexts
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiDirectory
@@ -16,7 +17,9 @@ import org.apache.commons.lang3.Validate
 import org.apache.commons.logging.LogFactory
 import org.c3lang.intellij.C3Icons
 import org.jetbrains.annotations.NonNls
+import java.io.File
 import java.util.Properties
+import kotlin.io.path.relativeTo
 
 class C3NewFileAction : CreateFileFromTemplateAction("C3 File", "Creates a new C3 file", C3Icons.FILE)
 {
@@ -27,6 +30,12 @@ class C3NewFileAction : CreateFileFromTemplateAction("C3 File", "Creates a new C
         builder.setTitle("New C3 File")
             .addKind("C3 file", C3Icons.FILE, "C3 File")
             .addKind("C3 interface", C3Icons.LIB_FILE, "C3 Interface")
+            .setValidator(object : InputValidator
+            {
+                override fun checkInput(text: String?) = !text.isNullOrEmpty() && !File(psiDirectory.virtualFile.path, text).exists()
+
+                override fun canClose(text: String?) = !text.isNullOrEmpty() && !File(psiDirectory.virtualFile.path, text).exists()
+            })
     }
 
     override fun createFileFromTemplate(name: String, template: FileTemplate, dir: PsiDirectory): PsiFile?
@@ -41,6 +50,11 @@ class C3NewFileAction : CreateFileFromTemplateAction("C3 File", "Creates a new C
 
         try
         {
+            if (File(dir.virtualFile.path, name).exists())
+            {
+                return null
+            }
+
             return FileTemplateUtil.createFromTemplate(template, name, properties, dir) as PsiFile
         } catch (e: Exception)
         {
@@ -55,7 +69,27 @@ class C3NewFileAction : CreateFileFromTemplateAction("C3 File", "Creates a new C
         val projectRoot = LocalFileSystem.getInstance().findFileByPath(file.project.basePath!!)
 
         Validate.notNull(projectRoot, "Project root cannot be null")
-        return projectRoot!!.name.replace(" ", "_").lowercase()
+        val baseName = projectRoot!!.name
+            .replace("-", "_")
+            .replace(" ", "_")
+            .lowercase()
+
+        val srcDir = projectRoot.findChild("src") ?: return baseName
+        val relativePath = file.virtualFile.toNioPath()
+            .relativeTo(srcDir.toNioPath())
+            .toString()
+            .replace(File.separator, "::")
+            .replace("-", "_")
+            .replace(" ", "_")
+            .lowercase()
+
+        return if (relativePath.isEmpty())
+        {
+            baseName
+        } else
+        {
+            "$baseName::$relativePath"
+        }
     }
 
     override fun getActionName(psiDirectory: PsiDirectory, newName: @NonNls String, templateName: @NonNls String?): @NlsContexts.Command String
