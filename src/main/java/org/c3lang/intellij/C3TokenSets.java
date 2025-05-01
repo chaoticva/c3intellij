@@ -52,6 +52,13 @@ public interface C3TokenSets
             C3Types.SHL_ASSIGN,
             C3Types.SHR_ASSIGN
     );
+
+    TokenSet OPERATORS = TokenSet.orSet(
+            BINARY_OPS,
+            OTHER_OPERATORS,
+            OPERATOR_ASSIGN_OPS
+    );
+
     TokenSet ASSIGNMENT = TokenSet.orSet(TokenSet.create(C3Types.EQ), OPERATOR_ASSIGN_OPS);
     TokenSet TYPES = TokenSet.create(C3Types.KW_ANY,
                                      C3Types.TYPE_IDENT,
