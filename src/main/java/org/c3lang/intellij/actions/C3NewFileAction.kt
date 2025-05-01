@@ -28,13 +28,45 @@ class C3NewFileAction : CreateFileFromTemplateAction("C3 File", "Creates a new C
     override fun buildDialog(project: Project, psiDirectory: PsiDirectory, builder: CreateFileFromTemplateDialog.Builder)
     {
         builder.setTitle("New C3 File")
-            .addKind("C3 file", C3Icons.FILE, "C3 File")
-            .addKind("C3 interface", C3Icons.LIB_FILE, "C3 Interface")
-            .setValidator(object : InputValidator
+            .addKind("C3 file", C3Icons.FILE, "C3 File", object : InputValidator
             {
-                override fun checkInput(text: String?) = !text.isNullOrEmpty() && !File(psiDirectory.virtualFile.path, text).exists()
+                override fun checkInput(text: String?): Boolean
+                {
+                    if (text.isNullOrEmpty()) return false
+                    if (text.contains(Regex("[\\s-]+"))) return false
+                    if (File(psiDirectory.virtualFile.path, "$text.c3").exists()) return false
 
-                override fun canClose(text: String?) = !text.isNullOrEmpty() && !File(psiDirectory.virtualFile.path, text).exists()
+                    return true
+                }
+
+                override fun canClose(text: String?): Boolean
+                {
+                    if (text.isNullOrEmpty()) return false
+                    if (text.contains(Regex("[\\s-]+"))) return false
+                    if (File(psiDirectory.virtualFile.path, "$text.c3").exists()) return false
+
+                    return true
+                }
+            })
+            .addKind("C3 interface", C3Icons.LIB_FILE, "C3 Interface", object : InputValidator
+            {
+                override fun checkInput(text: String?): Boolean
+                {
+                    if (text.isNullOrEmpty()) return false
+                    if (text.contains(Regex("[\\s-]+"))) return false
+                    if (File(psiDirectory.virtualFile.path, "$text.c3i").exists()) return false
+
+                    return true
+                }
+
+                override fun canClose(text: String?): Boolean
+                {
+                    if (text.isNullOrEmpty()) return false
+                    if (text.contains(Regex("[\\s-]+"))) return false
+                    if (File(psiDirectory.virtualFile.path, "$text.c3i").exists()) return false
+
+                    return true
+                }
             })
     }
 
@@ -45,16 +77,15 @@ class C3NewFileAction : CreateFileFromTemplateAction("C3 File", "Creates a new C
 
         val properties = Properties()
         properties.putAll(templateManager.defaultProperties)
-
         properties.setProperty("MODULE_NAME", getModuleName(dir))
+
+        if (File(dir.virtualFile.path, "$name.${template.extension}").exists())
+        {
+            return null
+        }
 
         try
         {
-            if (File(dir.virtualFile.path, name).exists())
-            {
-                return null
-            }
-
             return FileTemplateUtil.createFromTemplate(template, name, properties, dir) as PsiFile
         } catch (e: Exception)
         {
