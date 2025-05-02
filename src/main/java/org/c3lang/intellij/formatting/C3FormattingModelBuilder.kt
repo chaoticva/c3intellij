@@ -20,7 +20,6 @@ class C3FormattingModelBuilder : FormattingModelBuilder
     {
         return SpacingBuilder(settings, C3Language.INSTANCE)
             .before(C3Types.LB).spacing(0, 0, 1, true, 0)
-            .before(C3Types.RB).lineBreakInCode()
 
             .after(C3Types.KW_MODULE).spaces(1)
             .after(C3Types.KW_IMPORT).spaces(1)

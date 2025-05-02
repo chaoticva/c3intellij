@@ -38,7 +38,7 @@ class C3Block(
                 {
                     Indent.getNoneIndent()
                 }
-                val childWrap = if (child.elementType == C3Types.LB)
+                val childWrap = if (child.elementType == C3Types.LB && child.treeParent.elementType != C3Types.INITIALIZER_LIST)
                 {
                     Wrap.createWrap(WrapType.ALWAYS, true)
                 } else
@@ -65,11 +65,11 @@ class C3Block(
 
     private fun isStatement(node: ASTNode): Boolean
     {
-        return node.elementType in listOf(
-            C3Types.CONST_IDENT,
-            C3Types.STRUCT_MEMBER_DECLARATION,
-            C3Types.STATEMENT
-        ) && node.firstChildNode?.elementType != C3Types.COMPOUND_STATEMENT
+        if (node.elementType in listOf(C3Types.CONST_IDENT, C3Types.STRUCT_MEMBER_DECLARATION, C3Types.STATEMENT) && node.firstChildNode?.elementType != C3Types.COMPOUND_STATEMENT) return true
+
+        
+
+        return false
     }
 
     override fun getIndent(): Indent?
