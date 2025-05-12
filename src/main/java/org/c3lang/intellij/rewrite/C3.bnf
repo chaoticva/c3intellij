@@ -1,0 +1,151 @@
+{
+  parserClass="org.c3lang.intellij.rewrite.parser.C3Parser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="C3"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.c3lang.intellij.rewrite.psi"
+  psiImplPackage="org.c3lang.intellij.rewrite.psi.impl"
+
+  elementTypeHolderClass="org.c3lang.intellij.rewrite.psi.C3Types"
+  elementTypeClass="org.c3lang.intellij.rewrite.psi.C3ElementType"
+  tokenTypeClass="org.c3lang.intellij.rewrite.psi.C3TokenType"
+
+  psiImplUtilClass="org.c3lang.intellij.rewrite.psi.impl.C3PsiImplUtil"
+}
+
+file ::= (module | statement)*
+
+module ::= KW_MODULE path SEMICOLON statement*
+
+path ::= IDENTIFIER (PATH_SEPARATOR IDENTIFIER)*
+
+statement ::= LINE_COMMENT | import | fn | macro | const | enum | struct | union
+{
+    methods=[getModule]
+}
+
+import ::= KW_IMPORT path (COMMA path)* SEMICOLON
+
+fn ::= doc_comment? KW_EXTERN? KW_FN type fq_name parameters attribute* (lambda? SEMICOLON | fn_body)
+{
+    methods=[isExtern getLookupElement]
+}
+
+type ::= IDENTIFIER (LBRACKET INTEGER? RBRACKET)?
+{
+    methods=[getString]
+}
+
+fq_name ::= IDENTIFIER (PERIOD IDENTIFIER)?
+
+parameters ::= LPAREN (parameter (COMMA parameter)*)? RPAREN
+{
+    methods=[getString]
+}
+
+parameter ::= (type AMPERSAND? IDENTIFIER | AMPERSAND? IDENTIFIER)
+{
+    methods=[getName getLookupElement getContainingFn getContainingMacro isBorrowed isUsed]
+}
+
+attribute ::= ATTRIBUTE_NAME (LPAREN (expr (COMMA expr)*)? RPAREN)?
+{
+    methods=[getName]
+}
+
+lambda ::= ARROW expr
+
+expr ::= term (operator term)*
+
+fn_body ::= LBRACE fn_statement* RBRACE
+
+fn_statement ::= LINE_COMMENT | return | (call SEMICOLON) | assignment
+
+return ::= KW_RETURN expr? SEMICOLON
+{
+    pin=1
+}
+
+macro ::= KW_MACRO type? fq_name parameters attribute* (lambda SEMICOLON | fn_body)
+
+const ::= KW_CONST (type IDENTIFIER | IDENTIFIER) EQUALS expr SEMICOLON
+{
+    methods=[getName getLookupElement]
+}
+
+enum ::= KW_ENUM IDENTIFIER (COLON (parameters | (KW_INLINE IDENTIFIER)))? enum_body
+{
+    methods=[getName getLookupElement]
+}
+
+enum_body ::= LBRACE (enum_value (COMMA enum_value)*)? RBRACE
+
+enum_value ::= IDENTIFIER (EQUALS expr)?
+{
+    methods=[getName]
+}
+
+init ::= LBRACE (init_value (COMMA init_value)*)? RBRACE
+
+init_value ::= (PERIOD IDENTIFIER EQUALS)? expr
+
+struct ::= KW_STRUCT IDENTIFIER struct_body
+{
+    methods=[getName]
+}
+
+struct_body ::= LBRACE ((parameter SEMICOLON) | union)* RBRACE
+
+union ::= KW_UNION IDENTIFIER? struct_body
+{
+    methods=[getName]
+}
+
+cast ::= LPAREN type RPAREN
+
+call ::= call_name arguments (BANG | PANIC)?
+{
+    methods=[getFnDefinition getMacroDefinition getModule]
+}
+
+call_name ::= IDENTIFIER ((PATH_SEPARATOR | PERIOD) IDENTIFIER)*
+{
+    pin=1
+}
+
+arguments ::= LPAREN (expr (COMMA expr)*)? RPAREN
+
+field ::= IDENTIFIER (PERIOD IDENTIFIER)*
+{
+    pin=1
+}
+
+assignment ::= type IDENTIFIER (EQUALS expr)? SEMICOLON
+{
+    pin=3
+    methods=[getName]
+}
+
+doc_comment ::= DOC_START (IDENTIFIER | contract)* DOC_END
+
+contract ::= param_contract | return_contract | deprecated_contract | require_contract | ensure_contract | pure_contract
+
+param_contract ::= KW_DOC_PARAM ref? IDENTIFIER (COLON STRING)?
+
+ref ::= LBRACKET AMPERSAND? ("in" | "out" | "inout") RBRACKET
+
+return_contract ::= KW_DOC_RETURN BANG? STRING?
+
+deprecated_contract ::= KW_DOC_DEPRECATED STRING?
+
+require_contract ::= KW_DOC_REQUIRE expr (COMMA expr)* (COLON STRING)?
+
+ensure_contract ::= KW_DOC_ENSURE expr (COMMA expr)* (COLON STRING)?
+
+pure_contract ::= KW_DOC_PURE
+
+term ::= cast? (INTEGER | DOUBLE | FLOAT | STRING | CHAR | init | call | field | (LPAREN expr RPAREN))
+
+operator ::= LTE | GTE | LT | GT | IS_EQUAL | NOT_EQUAL

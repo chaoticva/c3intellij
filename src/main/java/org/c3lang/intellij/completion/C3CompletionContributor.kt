@@ -20,11 +20,12 @@ class C3CompletionContributor : CompletionContributor()
         extend(CompletionType.BASIC, pattern, InitializerListCompletionContributor)
         extend(CompletionType.BASIC, pattern, DocCommentCompletionContributor)
         extend(CompletionType.BASIC, pattern, TopLevelCompletionContributor)
+        extend(CompletionType.BASIC, pattern, FieldCompletionContributor)
     }
 
-    override fun beforeCompletion(context: CompletionInitializationContext)
-    {
-        // path
-        context.dummyIdentifier = DUMMY_IDENTIFIER
-    }
+//    override fun beforeCompletion(context: CompletionInitializationContext)
+//    {
+//        // path
+//        context.dummyIdentifier = DUMMY_IDENTIFIER
+//    }
 }
