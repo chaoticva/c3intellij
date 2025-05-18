@@ -41,6 +41,12 @@ public class C3StatementImpl extends ASTWrapperPsiElement implements C3Statement
 
   @Override
   @Nullable
+  public C3Faultdef getFaultdef() {
+    return findChildByClass(C3Faultdef.class);
+  }
+
+  @Override
+  @Nullable
   public C3Fn getFn() {
     return findChildByClass(C3Fn.class);
   }

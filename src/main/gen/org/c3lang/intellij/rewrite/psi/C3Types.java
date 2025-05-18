@@ -14,15 +14,21 @@ public interface C3Types {
   IElementType CALL = new C3ElementType("CALL");
   IElementType CALL_NAME = new C3ElementType("CALL_NAME");
   IElementType CAST = new C3ElementType("CAST");
+  IElementType COMP_ELSE = new C3ElementType("COMP_ELSE");
+  IElementType COMP_ENDIF = new C3ElementType("COMP_ENDIF");
+  IElementType COMP_IF = new C3ElementType("COMP_IF");
   IElementType CONST = new C3ElementType("CONST");
   IElementType CONTRACT = new C3ElementType("CONTRACT");
+  IElementType DEFAULT = new C3ElementType("DEFAULT");
   IElementType DEPRECATED_CONTRACT = new C3ElementType("DEPRECATED_CONTRACT");
+  IElementType DESCRIPTION = new C3ElementType("DESCRIPTION");
   IElementType DOC_COMMENT = new C3ElementType("DOC_COMMENT");
   IElementType ENSURE_CONTRACT = new C3ElementType("ENSURE_CONTRACT");
   IElementType ENUM = new C3ElementType("ENUM");
   IElementType ENUM_BODY = new C3ElementType("ENUM_BODY");
   IElementType ENUM_VALUE = new C3ElementType("ENUM_VALUE");
   IElementType EXPR = new C3ElementType("EXPR");
+  IElementType FAULTDEF = new C3ElementType("FAULTDEF");
   IElementType FIELD = new C3ElementType("FIELD");
   IElementType FN = new C3ElementType("FN");
   IElementType FN_BODY = new C3ElementType("FN_BODY");
@@ -62,12 +68,16 @@ public interface C3Types {
   IElementType DOC_START = new C3TokenType("DOC_START");
   IElementType DOUBLE = new C3TokenType("DOUBLE");
   IElementType EQUALS = new C3TokenType("EQUALS");
+  IElementType FAULT = new C3TokenType("FAULT");
   IElementType FLOAT = new C3TokenType("FLOAT");
   IElementType GT = new C3TokenType("GT");
   IElementType GTE = new C3TokenType("GTE");
   IElementType IDENTIFIER = new C3TokenType("IDENTIFIER");
   IElementType INTEGER = new C3TokenType("INTEGER");
   IElementType IS_EQUAL = new C3TokenType("IS_EQUAL");
+  IElementType KW_COMP_ELSE = new C3TokenType("KW_COMP_ELSE");
+  IElementType KW_COMP_ENDIF = new C3TokenType("KW_COMP_ENDIF");
+  IElementType KW_COMP_IF = new C3TokenType("KW_COMP_IF");
   IElementType KW_CONST = new C3TokenType("KW_CONST");
   IElementType KW_DOC_DEPRECATED = new C3TokenType("KW_DOC_DEPRECATED");
   IElementType KW_DOC_ENSURE = new C3TokenType("KW_DOC_ENSURE");
@@ -77,6 +87,7 @@ public interface C3Types {
   IElementType KW_DOC_RETURN = new C3TokenType("KW_DOC_RETURN");
   IElementType KW_ENUM = new C3TokenType("KW_ENUM");
   IElementType KW_EXTERN = new C3TokenType("KW_EXTERN");
+  IElementType KW_FAULTDEF = new C3TokenType("KW_FAULTDEF");
   IElementType KW_FN = new C3TokenType("KW_FN");
   IElementType KW_IMPORT = new C3TokenType("KW_IMPORT");
   IElementType KW_INLINE = new C3TokenType("KW_INLINE");
@@ -100,6 +111,7 @@ public interface C3Types {
   IElementType RPAREN = new C3TokenType("RPAREN");
   IElementType SEMICOLON = new C3TokenType("SEMICOLON");
   IElementType STRING = new C3TokenType("STRING");
+  IElementType TEXT = new C3TokenType("TEXT");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -122,14 +134,29 @@ public interface C3Types {
       else if (type == CAST) {
         return new C3CastImpl(node);
       }
+      else if (type == COMP_ELSE) {
+        return new C3CompElseImpl(node);
+      }
+      else if (type == COMP_ENDIF) {
+        return new C3CompEndifImpl(node);
+      }
+      else if (type == COMP_IF) {
+        return new C3CompIfImpl(node);
+      }
       else if (type == CONST) {
         return new C3ConstImpl(node);
       }
       else if (type == CONTRACT) {
         return new C3ContractImpl(node);
       }
+      else if (type == DEFAULT) {
+        return new C3DefaultImpl(node);
+      }
       else if (type == DEPRECATED_CONTRACT) {
         return new C3DeprecatedContractImpl(node);
+      }
+      else if (type == DESCRIPTION) {
+        return new C3DescriptionImpl(node);
       }
       else if (type == DOC_COMMENT) {
         return new C3DocCommentImpl(node);
@@ -148,6 +175,9 @@ public interface C3Types {
       }
       else if (type == EXPR) {
         return new C3ExprImpl(node);
+      }
+      else if (type == FAULTDEF) {
+        return new C3FaultdefImpl(node);
       }
       else if (type == FIELD) {
         return new C3FieldImpl(node);

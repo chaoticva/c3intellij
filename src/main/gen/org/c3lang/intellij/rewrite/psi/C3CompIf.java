@@ -5,12 +5,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface C3RequireContract extends PsiElement {
+public interface C3CompIf extends PsiElement {
 
   @Nullable
-  C3Description getDescription();
+  C3CompElse getCompElse();
 
   @NotNull
-  List<C3Expr> getExprList();
+  C3CompEndif getCompEndif();
+
+  @NotNull
+  C3Expr getExpr();
+
+  @NotNull
+  List<C3FnStatement> getFnStatementList();
 
 }

@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface C3EnsureContract extends PsiElement {
 
+  @Nullable
+  C3Description getDescription();
+
   @NotNull
   List<C3Expr> getExprList();
 

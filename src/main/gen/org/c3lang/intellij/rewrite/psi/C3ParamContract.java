@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface C3ParamContract extends PsiElement {
 
   @Nullable
+  C3Description getDescription();
+
+  @Nullable
   C3Ref getRef();
 
 }

@@ -5,12 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface C3RequireContract extends PsiElement {
-
-  @Nullable
-  C3Description getDescription();
-
-  @NotNull
-  List<C3Expr> getExprList();
+public interface C3CompEndif extends PsiElement {
 
 }

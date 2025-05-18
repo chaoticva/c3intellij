@@ -14,6 +14,9 @@ public interface C3FnStatement extends PsiElement {
   C3Call getCall();
 
   @Nullable
+  C3CompIf getCompIf();
+
+  @Nullable
   C3Return getReturn();
 
 }

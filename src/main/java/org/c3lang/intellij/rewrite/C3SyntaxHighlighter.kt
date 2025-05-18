@@ -32,7 +32,6 @@ class C3SyntaxHighlighter : SyntaxHighlighterBase()
     private val string = TextAttributesKey.createTextAttributesKey("C3_STRING", DefaultLanguageHighlighterColors.STRING)
     private val number = TextAttributesKey.createTextAttributesKey("C3_NUMBER", DefaultLanguageHighlighterColors.NUMBER)
     private val lineComment = TextAttributesKey.createTextAttributesKey("C3_LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
-    private val blockComment = TextAttributesKey.createTextAttributesKey("C3_BLOCK_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT)
     private val badCharacter = TextAttributesKey.createTextAttributesKey("C3_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
 
     override fun getHighlightingLexer(): Lexer
@@ -62,7 +61,6 @@ class C3SyntaxHighlighter : SyntaxHighlighterBase()
 
             INTEGER                 -> return arrayOf(number)
             LINE_COMMENT            -> return arrayOf(lineComment)
-//            BLOCK_COMMENT                 -> return arrayOf(blockComment)
 
             TokenType.BAD_CHARACTER -> return arrayOf(badCharacter)
         }

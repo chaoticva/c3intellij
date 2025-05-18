@@ -41,6 +41,12 @@ public class C3FnStatementImpl extends ASTWrapperPsiElement implements C3FnState
 
   @Override
   @Nullable
+  public C3CompIf getCompIf() {
+    return findChildByClass(C3CompIf.class);
+  }
+
+  @Override
+  @Nullable
   public C3Return getReturn() {
     return findChildByClass(C3Return.class);
   }

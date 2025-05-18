@@ -35,6 +35,12 @@ public class C3MacroImpl extends ASTWrapperPsiElement implements C3Macro {
 
   @Override
   @Nullable
+  public C3DocComment getDocComment() {
+    return findChildByClass(C3DocComment.class);
+  }
+
+  @Override
+  @Nullable
   public C3FnBody getFnBody() {
     return findChildByClass(C3FnBody.class);
   }

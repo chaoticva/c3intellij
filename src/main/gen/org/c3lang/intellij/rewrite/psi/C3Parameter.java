@@ -9,6 +9,9 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 public interface C3Parameter extends PsiElement {
 
   @Nullable
+  C3Default getDefault();
+
+  @Nullable
   C3Type getType();
 
   @NotNull String getName();

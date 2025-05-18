@@ -29,6 +29,12 @@ public class C3TermImpl extends ASTWrapperPsiElement implements C3Term {
 
   @Override
   @Nullable
+  public C3Attribute getAttribute() {
+    return findChildByClass(C3Attribute.class);
+  }
+
+  @Override
+  @Nullable
   public C3Call getCall() {
     return findChildByClass(C3Call.class);
   }

@@ -30,6 +30,12 @@ public class C3ParameterImpl extends ASTWrapperPsiElement implements C3Parameter
 
   @Override
   @Nullable
+  public C3Default getDefault() {
+    return findChildByClass(C3Default.class);
+  }
+
+  @Override
+  @Nullable
   public C3Type getType() {
     return findChildByClass(C3Type.class);
   }

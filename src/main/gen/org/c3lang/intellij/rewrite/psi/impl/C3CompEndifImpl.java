@@ -11,32 +11,20 @@ import static org.c3lang.intellij.rewrite.psi.C3Types.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.c3lang.intellij.rewrite.psi.*;
 
-public class C3EnsureContractImpl extends ASTWrapperPsiElement implements C3EnsureContract {
+public class C3CompEndifImpl extends ASTWrapperPsiElement implements C3CompEndif {
 
-  public C3EnsureContractImpl(@NotNull ASTNode node) {
+  public C3CompEndifImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull C3Visitor visitor) {
-    visitor.visitEnsureContract(this);
+    visitor.visitCompEndif(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof C3Visitor) accept((C3Visitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public C3Description getDescription() {
-    return findChildByClass(C3Description.class);
-  }
-
-  @Override
-  @NotNull
-  public List<C3Expr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, C3Expr.class);
   }
 
 }

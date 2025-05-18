@@ -14,6 +14,9 @@ public interface C3Statement extends PsiElement {
   C3Enum getEnum();
 
   @Nullable
+  C3Faultdef getFaultdef();
+
+  @Nullable
   C3Fn getFn();
 
   @Nullable

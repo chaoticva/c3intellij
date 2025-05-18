@@ -11,14 +11,14 @@ import static org.c3lang.intellij.rewrite.psi.C3Types.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.c3lang.intellij.rewrite.psi.*;
 
-public class C3EnsureContractImpl extends ASTWrapperPsiElement implements C3EnsureContract {
+public class C3CompIfImpl extends ASTWrapperPsiElement implements C3CompIf {
 
-  public C3EnsureContractImpl(@NotNull ASTNode node) {
+  public C3CompIfImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull C3Visitor visitor) {
-    visitor.visitEnsureContract(this);
+    visitor.visitCompIf(this);
   }
 
   @Override
@@ -29,14 +29,26 @@ public class C3EnsureContractImpl extends ASTWrapperPsiElement implements C3Ensu
 
   @Override
   @Nullable
-  public C3Description getDescription() {
-    return findChildByClass(C3Description.class);
+  public C3CompElse getCompElse() {
+    return findChildByClass(C3CompElse.class);
   }
 
   @Override
   @NotNull
-  public List<C3Expr> getExprList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, C3Expr.class);
+  public C3CompEndif getCompEndif() {
+    return findNotNullChildByClass(C3CompEndif.class);
+  }
+
+  @Override
+  @NotNull
+  public C3Expr getExpr() {
+    return findNotNullChildByClass(C3Expr.class);
+  }
+
+  @Override
+  @NotNull
+  public List<C3FnStatement> getFnStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, C3FnStatement.class);
   }
 
 }

@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface C3Term extends PsiElement {
 
   @Nullable
+  C3Attribute getAttribute();
+
+  @Nullable
   C3Call getCall();
 
   @Nullable

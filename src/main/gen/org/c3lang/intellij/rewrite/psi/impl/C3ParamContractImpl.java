@@ -29,6 +29,12 @@ public class C3ParamContractImpl extends ASTWrapperPsiElement implements C3Param
 
   @Override
   @Nullable
+  public C3Description getDescription() {
+    return findChildByClass(C3Description.class);
+  }
+
+  @Override
+  @Nullable
   public C3Ref getRef() {
     return findChildByClass(C3Ref.class);
   }

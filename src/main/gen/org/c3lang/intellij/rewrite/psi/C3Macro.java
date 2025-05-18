@@ -11,6 +11,9 @@ public interface C3Macro extends PsiElement {
   List<C3Attribute> getAttributeList();
 
   @Nullable
+  C3DocComment getDocComment();
+
+  @Nullable
   C3FnBody getFnBody();
 
   @NotNull

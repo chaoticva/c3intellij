@@ -28,6 +28,12 @@ public class C3RequireContractImpl extends ASTWrapperPsiElement implements C3Req
   }
 
   @Override
+  @Nullable
+  public C3Description getDescription() {
+    return findChildByClass(C3Description.class);
+  }
+
+  @Override
   @NotNull
   public List<C3Expr> getExprList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, C3Expr.class);
